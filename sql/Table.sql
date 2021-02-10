@@ -24,5 +24,14 @@ CREATE TABLE customer (
 	C_latitude  FLOAT(6) NOT NULL,
 	C_longitude  FLOAT(6) NOT NULL
 );
+
+CREATE TABLE ordert (
+	O_ID int NOT NULL AUTO_INCREMENT,
+	C_ID int NOT NULL,
+	R_ID int NOT NULL,
+	D_ID int NOT NULL,
+	created_at TIMESTAMP
+);
+
 ALTER TABLE menu
 ADD FOREIGN KEY (R_ID) REFERENCES restaurant(R_ID);
