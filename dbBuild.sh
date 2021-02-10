@@ -4,4 +4,5 @@ go clean -modcache
 go mod init example.com 
 go mod tidy
 echo "go build succeed"
-go run setupSql.go
+go run sql/setupSql.go
+go run mongo/setupMongo.go
