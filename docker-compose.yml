@@ -6,13 +6,21 @@ services:
       - BackendDb:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: testDb
-      MYSQL_USER: user
+      MYSQL_DATABASE: AgilestRelationDB
+      MYSQL_USER: root
       MYSQL_PASSWORD: password
-      command: 
     ports:
       - '8080:3306'
-  
+  mongo:
+    image: mongo
+    volumes:
+      - BackendDb:/var/lib/mongo
+    environment: 
+      -MONGO_INITDB_DATABASE: AgilestNoRelationDB
+      -MONGO_INITDB_ROOT_USERNAME: user
+      -MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - '8081:3307'
 volumes: 
   BackendDb:
 
