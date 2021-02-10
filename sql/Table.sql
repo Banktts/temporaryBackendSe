@@ -30,14 +30,6 @@ CREATE TABLE ordert (
 	C_ID int NOT NULL,
 	R_ID int NOT NULL,
 	D_ID int NOT NULL,
-	created_at TIMESTAMP
-);
-
-CREATE TABLE ordert (
-	O_ID int NOT NULL AUTO_INCREMENT,
-	C_ID int NOT NULL,
-	R_ID int NOT NULL,
-	D_ID int NOT NULL,
 	created_at TIMESTAMP,
 	primary key(O_ID)
 );
@@ -61,7 +53,5 @@ CREATE TABLE delivery_man (
 
 ALTER TABLE menu
 ADD FOREIGN KEY (R_ID) REFERENCES restaurant(R_ID);
-
-ALTER TABLE orderline ADD FOREIGN KEY (O_ID) REFERENCES ORDERT(O_ID);
-
+ALTER TABLE orderline ADD FOREIGN KEY (O_ID) REFERENCES ordert(O_ID);
 ALTER TABLE ordert ADD FOREIGN KEY (D_ID) REFERENCES delivery_man(D_ID);
