@@ -1,5 +1,4 @@
 package main
-
 import (
 	"database/sql"
 	"fmt"
@@ -11,22 +10,39 @@ import (
 
 func main(){
 	fmt.Println("Go MYSQL Tutorial")
-	db,errDb:=sql.Open("mysql","root:password@tcp(localhost:8080)/testDb")
+	db,errDb:=sql.Open("mysql","root:password@tcp(localhost:8080)/AgilestRelationDB")
 	if errDb != nil{
 		panic(errDb.Error())
 	}
 	
 	
-	insertFile, err:=ioutil.ReadFile("sql/insert_into_db_aroijangfood.sql")
+	CreatesFile, err:=ioutil.ReadFile("sql/Table.sql")
 	if err != nil{
 		panic(err)
 	}
-	inserts := strings.Split(string(insertFile), ";")
-	for _, insert := range inserts {
-		fmt.Println(insert)
-		if _,errI := db.Exec(insert); errI != nil{
-			panic(errI)
+	Craetes := strings.Split(string(CreatesFile), ";")
+	for _, Craete := range Craetes {
+		fmt.Println(Craete)
+		if Craete != "" {
+			if _,errI := db.Exec(Craete); errI != nil{
+				panic(errI)
+			}
 		}
+		
+	}
+	mockDatas, err:=ioutil.ReadFile("sql/mockData.sql")
+	if err != nil{
+		panic(err)
+	}
+	Datas := strings.Split(string(mockDatas), ";")
+	for _, Data := range Datas {
+		fmt.Println(Data)
+		if Data != "" {
+			if _,errI := db.Exec(Data); errI != nil{
+				panic(errI)
+			}
+		}
+		
 	}
 
 
