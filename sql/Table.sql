@@ -33,5 +33,31 @@ CREATE TABLE ordert (
 	created_at TIMESTAMP
 );
 
+CREATE TABLE ordert (
+	O_ID int NOT NULL AUTO_INCREMENT,
+	C_ID int NOT NULL,
+	R_ID int NOT NULL,
+	D_ID int NOT NULL,
+	created_at TIMESTAMP,
+	primary key(O_ID)
+);
+CREATE TABLE orderline (
+	O_ID int NOT NULL,
+	M_ID int NOT NULL,
+	E_ID int NOT NULL,
+	amount int NOT NULL,
+	special_inst varchar(255) NOT NULL,
+	primary key(O_ID, M_ID, E_ID)
+);
+
+CREATE TABLE delivery_man (
+	D_ID int   NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	D_name varchar(20)NOT NULL,
+	D_phone varchar(15) NOT NULL,
+	D_rating float NOT NULL,
+	D_latitude  FLOAT(6) NOT NULL,
+	D_longitude  FLOAT(6) NOT NULL
+);
+
 ALTER TABLE menu
 ADD FOREIGN KEY (R_ID) REFERENCES restaurant(R_ID);
