@@ -17,7 +17,7 @@ INSERT INTO restaurant VALUES
 (16,"ทอดป้ะล่ะ",5,392,13.649990,100.638885,FALSE,"https://i.pinimg.com/236x/b5/9b/af/b59baf0bd780f083b75f4024d1406374.jpg"),
 (17,"แซ่บสุดใจ",4.7,743,13.766063,100.365601,TRUE,"https://www.growslogo.com/wp-content/uploads/2019/11/logo-%E0%B8%AA%E0%B9%89%E0%B8%A1%E0%B8%95%E0%B8%B3-500x365.jpg");
 INSERT INTO menu VALUES
-(1,1,"size M",149,"food","https://content.shopback.com/th/wp-content/uploads/2019/08/22132641/shutterstock_1040832388.jpg"),
+(1,1,"ไก่ทอดเกาหลี size M",149,"food","https://content.shopback.com/th/wp-content/uploads/2019/08/22132641/shutterstock_1040832388.jpg"),
 (2,1,"ไก่ทอดเกาหลี size L",179,"food","https://content.shopback.com/th/wp-content/uploads/2019/08/22132641/shutterstock_1040832388.jpg"),
 (3,1,"ซุปกิมจิ",99,"food","https://www.koreanbapsang.com/wp-content/uploads/2014/03/DSC_5089-3.jpg"),
 (4,1,"เฟรนซ์ฟรายด์",49,"snack","https://img.apmcdn.org/4b2716626c9ff3f6e5dfebe520eb592c33cf1e7b/uncropped/941f50-splendid-table-french-fries.jpg "),
