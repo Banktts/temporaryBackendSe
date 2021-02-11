@@ -1,0 +1,4 @@
+file_to_ignore
+.DS_Store
+go.mod
+go.sum
