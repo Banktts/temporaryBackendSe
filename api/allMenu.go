@@ -1,18 +1,18 @@
 package api
 
 import (
+	"context"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
-	"context"
 )
 
 
 
-func AllMenu() {
+func AllMenu()[]bson.M {
 	ExtraMenu:=extraMenu(17)
-	fmt.Println(ExtraMenu)
-}
+	return ExtraMenu
 
+}
 func extraMenu(mid int) []bson.M {
 	fmt.Println("allMenu")
 	extra := connectMongoDB().Collection("EXTRA_ITEM")
