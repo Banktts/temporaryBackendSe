@@ -1,12 +1,11 @@
 package main
 
-import(	
+import (
 	Api "example.com/temporaryBackendSe/api"
 	"fmt"
-	"net/http"
 	"github.com/gorilla/mux"
 	"log"
-	
+	"net/http"
 )
 
 func  homePage(w http.ResponseWriter, r *http.Request){
@@ -21,6 +20,7 @@ func handleRequests(){
 
 
 func main(){
+	Api.AllMenu()
 	handleRequests()
-	Api.Test()
+
 }
