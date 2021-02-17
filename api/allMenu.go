@@ -8,7 +8,7 @@ import (
 
 
 
-func AllMenu() bson.M {
+func AllMenu(R_id int) bson.M {
 	allmenu:=bson.M{
 		"M_Extra" : extraMenu(17),
 	}
