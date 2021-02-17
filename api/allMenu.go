@@ -15,7 +15,7 @@ func AllMenu() {
 
 func extraMenu(mid int) []bson.M {
 	fmt.Println("allMenu")
-	extra := connectMongoDB().Collection("EXTRA_ITEM")
+	extra := connectMongoDB("AgilestNoRelationDB").Collection("EXTRA_ITEM")
 	var extras []bson.M
 	rawData,err:=extra.Find(context.TODO(),bson.M{"M_id": mid})
 	if err != nil {
