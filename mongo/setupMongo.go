@@ -52,7 +52,7 @@ func main() {
 		EID, _ := strconv.Atoi(line[0])
 		PRICE, _ := strconv.Atoi(line[2])
 		MID, _ := strconv.Atoi(line[3])
-		insertResult, err := collection.InsertOne(context.TODO(), bson.D{{"eid",EID},{"mid",MID},{"name",line[1]},{"price",PRICE},{"etype",line[4]} })
+		insertResult, err := collection.InsertOne(context.TODO(), bson.D{{"E_id",EID},{"M_id",MID},{"E_name",line[1]},{"E_price",PRICE},{"E_type",line[4]} })
 		if err != nil {
 			fmt.Println(err)
 		}
