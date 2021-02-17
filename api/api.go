@@ -12,7 +12,7 @@ func Test(){
 	fmt.Println("test")
 }
 
-func connectMongoDB() *mongo.Database {
+func connectMongoDB(collection string) *mongo.Database {
 
 	if errClient != nil {
 		fmt.Println(errClient)
@@ -26,7 +26,7 @@ func connectMongoDB() *mongo.Database {
 	}
 
 	fmt.Println("Connected to MongoDB!")
-	return client.Database("AgilestNoRelationDB")
+	return client.Database(collection)
 
 }
 
