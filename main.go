@@ -14,7 +14,7 @@ func allMenu(w http.ResponseWriter, r *http.Request){
 	json.NewEncoder(w).Encode(Api.AllMenu(17))
 }
 
-func getRestaurantBanner(w http.ResponseWriter, r *http.Request){
+func getRestaurant(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 
@@ -26,7 +26,7 @@ func getRestaurantBanner(w http.ResponseWriter, r *http.Request){
 	if err2 != nil {
 		panic(err2.Error())
 	}
-	json.NewEncoder(w).Encode(Api.GetRestaurantBanner(params["keyword"], lat, long))
+	json.NewEncoder(w).Encode(Api.GetRestaurant(params["keyword"], lat, long))
 }
 
 func  homePage(w http.ResponseWriter, r *http.Request){
@@ -37,7 +37,7 @@ func handleRequests(){
 	myRouter := mux.NewRouter().StrictSlash(true)
 	myRouter.HandleFunc("/",homePage)
 	myRouter.HandleFunc("/allmenu", allMenu).Methods("GET")
-	myRouter.HandleFunc("/restaurant/{keyword}/{latitude}/{longitude}", getRestaurantBanner).Methods("GET")
+	myRouter.HandleFunc("/restaurant/{keyword}/{latitude}/{longitude}", getRestaurant).Methods("GET")
 	log.Fatal(http.ListenAndServe(":9000",myRouter))
 }
 
