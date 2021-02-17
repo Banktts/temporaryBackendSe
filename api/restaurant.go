@@ -17,7 +17,7 @@ type Res struct {
 func GetRestaurant(keyword string, latitude float64, longitude float64)[]Res {	
 	db := connectSqlDB()
 
-	rows, err:= db.Query("select R_ID, R_name, R_rating, R_votes, R_isRecomend, R_image_url,sqrt(power((R_latitude - ?),2)+power((R_longitude - ?),2)) as R_distance from restaurant where R_name like '%"+keyword+"%' order by R_distance", latitude, longitude)
+	rows, err:= db.Query("select R_ID, R_name, R_rating, R_votes, R_isRecomend, R_image_url, (sqrt(power((R_latitude-?),2)+power((R_longitude-?),2)))*100 as R_distance from restaurant where R_name like '%"+keyword+"%' order by R_distance", latitude, longitude)
 	if err!=nil{
 		fmt.Println(err)
 	}
