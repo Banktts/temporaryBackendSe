@@ -8,9 +8,12 @@ import (
 
 
 
-func AllMenu()[]bson.M {
-	ExtraMenu:=extraMenu(17)
-	return ExtraMenu
+func AllMenu() bson.M {
+	allmenu:=bson.M{
+		"M_Extra" : extraMenu(17),
+	}
+	
+	return allmenu
 
 }
 func extraMenu(mid int) []bson.M {
