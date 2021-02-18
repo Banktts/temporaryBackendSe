@@ -3,12 +3,13 @@ import(
 	"context"
 	"database/sql"
 	"fmt"
+	"time"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	_ "github.com/go-sql-driver/mysql"
 )
-var clientOptions = options.Client().ApplyURI("mongodb://localhost:27017")
-var client, errClient = mongo.Connect(context.TODO(), clientOptions)
+var ctx, cancel = context.WithTimeout(context.Background(), 10*time.Second)
+var client, errClient = mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
 var sqlDb, errDb = sql.Open("mysql", "root:password@tcp(localhost:8080)/AgilestRelationDB")
 
 func connectMongoDB() *mongo.Database {
@@ -16,7 +17,11 @@ func connectMongoDB() *mongo.Database {
 	if errClient != nil {
 		fmt.Println(errClient)
 	}
-
+	//Call the connect function of client
+	errorCon := client.Connect(ctx)
+	if errorCon != nil {
+		fmt.Println(errorCon)
+	}
 	// Check the connection
 	errClient = client.Ping(context.TODO(), nil)
 
@@ -30,10 +35,7 @@ func connectMongoDB() *mongo.Database {
 }
 
 func disconectMongoDB(){
-	errDis := client.Disconnect(context.TODO())
-	if errDis != nil {
-		fmt.Println(errClient)
-	}
+	defer cancel()
 	fmt.Println("Connection to MongoDB closed.")
 }
 
