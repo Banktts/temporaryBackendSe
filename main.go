@@ -11,7 +11,14 @@ import (
 )
 
 func allMenu(w http.ResponseWriter, r *http.Request){
-	json.NewEncoder(w).Encode(Api.AllMenu(17))
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	R_id, err1 := strconv.ParseFloat(params["R_id"], 64)
+	if err1 != nil {
+		panic(err1.Error())
+	}
+	json.NewEncoder(w).Encode(Api.AllMenu(int(R_id)))
+	
 }
 
 func getRestaurant(w http.ResponseWriter, r *http.Request){
@@ -53,7 +60,7 @@ func  homePage(w http.ResponseWriter, r *http.Request){
 func handleRequests(){
 	myRouter := mux.NewRouter().StrictSlash(true)
 	myRouter.HandleFunc("/",homePage)
-	myRouter.HandleFunc("/allmenu", allMenu).Methods("GET")
+	myRouter.HandleFunc("/allmenu/{R_id}", allMenu).Methods("GET")
 	myRouter.HandleFunc("/restaurant/{keyword}/{latitude}/{longitude}", getRestaurant).Methods("GET")
 	myRouter.HandleFunc("/banner/{latitude}/{longitude}", getBanner).Methods("GET")
 	log.Fatal(http.ListenAndServe(":9000",myRouter))
@@ -61,5 +68,9 @@ func handleRequests(){
 
 
 func main(){
+	// fmt.Println(Api.AllMenu(1))
 	handleRequests()
+
+			
+
 }
