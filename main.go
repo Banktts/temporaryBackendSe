@@ -68,8 +68,9 @@ func handleRequests(){
 
 
 func main(){
-	// fmt.Println(Api.AllMenu(1))
+	// fmt.Println(Api.GetRestaurant("ป", 13.6932, 100.565))
 	handleRequests()
+
 
 			
 
