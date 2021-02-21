@@ -63,10 +63,15 @@ func handleRequests(){
 	myRouter.HandleFunc("/allmenu/{R_id}", allMenu).Methods("GET")
 	myRouter.HandleFunc("/restaurant/{keyword}/{latitude}/{longitude}", getRestaurant).Methods("GET")
 	myRouter.HandleFunc("/banner/{latitude}/{longitude}", getBanner).Methods("GET")
-	log.Fatal(http.ListenAndServe(":80",myRouter))
+	log.Fatal(http.ListenAndServe(":9000",myRouter))
 }
 
 
 func main(){
+	// fmt.Println(Api.GetRestaurant("ป", 13.6932, 100.565))
 	handleRequests()
+
+
+			
+
 }
