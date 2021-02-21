@@ -6,7 +6,8 @@ CREATE TABLE restaurant (
 	R_latitude FLOAT(6) NOT NULL ,
 	R_longitude FLOAT(6 ) NOT NULL,
 	R_isRecomend BOOLEAN NOT NULL,
-	R_image_url varchar(255) NOT NULL 
+	R_image_url varchar(255) NOT NULL,
+	R_location varchar(255) NOT NULL
 
 );
 
