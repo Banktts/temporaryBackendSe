@@ -6,6 +6,12 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> main
 type Menu struct {
 	R_id        int      `Bson:"R_id"`
 	M_id        int      `Bson:"M_id"`
@@ -30,17 +36,30 @@ func extraMenu(mid int) []bson.M {
 	}
 	rawData.All(context.TODO(), &extras)
 	disconectMongoDB()
+<<<<<<< HEAD
+=======
+	
+>>>>>>> main
 	return extras
 }
 
 func addData(alltyp []Typ,typeFood string,R_id int) []Typ {
+<<<<<<< HEAD
+=======
+	
+>>>>>>> main
 	stmt, err := connectSqlDB().Prepare("select * from menu where R_id = ? and M_type = ?")		
 	rows,err := stmt.Query(R_id,typeFood)
 		var allmenu []Menu
 		if err != nil {
 			panic(err.Error())
 		}
+<<<<<<< HEAD
 		defer rows.Close()	
+=======
+		defer rows.Close()
+				
+>>>>>>> main
 		for rows.Next() {
 			var R_id int
 			var M_id int
@@ -62,16 +81,18 @@ func addData(alltyp []Typ,typeFood string,R_id int) []Typ {
 				M_image_url: M_image_url,
 				M_Extra: extraMenu(M_id),
 			}
+			
 			allmenu = append(allmenu,menu)			
 		}
 		typ := Typ {
 			T_name : typeFood,
 			T_type : allmenu,
+
 		}
 		alltyp = append(alltyp, typ)
 		return alltyp
-}
 
+}
 func AllMenu(R_id int) []Typ {
 	var alltyp []Typ
 	rowst, err :=connectSqlDB().Query("select M_type from menu where R_id = ? GROUP BY M_type ",R_id)
@@ -91,6 +112,10 @@ func AllMenu(R_id int) []Typ {
 
 	}
 	fmt.Println(alltyp)
+	
+	
+
 	return alltyp
+
 }
 
