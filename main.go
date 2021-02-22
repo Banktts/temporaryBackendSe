@@ -18,7 +18,6 @@ func allMenu(w http.ResponseWriter, r *http.Request){
 		panic(err1.Error())
 	}
 	json.NewEncoder(w).Encode(Api.AllMenu(int(R_id)))
-	
 }
 
 func getRestaurant(w http.ResponseWriter, r *http.Request){
@@ -66,12 +65,6 @@ func handleRequests(){
 	log.Fatal(http.ListenAndServe(":9000",myRouter))
 }
 
-
 func main(){
-	// fmt.Println(Api.GetRestaurant("ป", 13.6932, 100.565))
 	handleRequests()
-
-
-			
-
 }
