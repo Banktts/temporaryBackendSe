@@ -8,9 +8,21 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 )
 
-func allMenu(w http.ResponseWriter, r *http.Request){
+type ordert struct {
+	C_id         string
+	C_name       string
+	C_tel        string
+	C_latitude   float64
+	C_longtitude float64
+	R_id         int
+	Created_at   time.Time
+	Ordertline   Api.Orderline
+}
+
+func allMenu(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	R_id, err1 := strconv.ParseFloat(params["R_id"], 64)
@@ -20,7 +32,7 @@ func allMenu(w http.ResponseWriter, r *http.Request){
 	json.NewEncoder(w).Encode(Api.AllMenu(int(R_id)))
 }
 
-func getRestaurant(w http.ResponseWriter, r *http.Request){
+func getRestaurant(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 
@@ -35,7 +47,7 @@ func getRestaurant(w http.ResponseWriter, r *http.Request){
 	json.NewEncoder(w).Encode(Api.GetRestaurant(params["keyword"], lat, long))
 }
 
-func getBanner(w http.ResponseWriter, r *http.Request){
+func getBanner(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 
@@ -52,19 +64,24 @@ func getBanner(w http.ResponseWriter, r *http.Request){
 	json.NewEncoder(w).Encode(Api.GetBanner(lat, long))
 }
 
-func  homePage(w http.ResponseWriter, r *http.Request){
-	fmt.Fprintf(w,"Homepage")
+func submitCart(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 }
 
-func handleRequests(){
+func homePage(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Homepage")
+}
+
+func handleRequests() {
 	myRouter := mux.NewRouter().StrictSlash(true)
-	myRouter.HandleFunc("/",homePage)
+	myRouter.HandleFunc("/", homePage)
 	myRouter.HandleFunc("/allmenu/{R_id}", allMenu).Methods("GET")
 	myRouter.HandleFunc("/restaurant/{keyword}/{latitude}/{longitude}", getRestaurant).Methods("GET")
 	myRouter.HandleFunc("/banner/{latitude}/{longitude}", getBanner).Methods("GET")
-	log.Fatal(http.ListenAndServe(":9000",myRouter))
+	log.Fatal(http.ListenAndServe(":9000", myRouter))
 }
 
-func main(){
+func main() {
 	handleRequests()
+	Api.MExtraAdd(2, 2, 2, "hi") //test
 }
