@@ -8,18 +8,18 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"time"
 )
 
-type ordert struct {
-	C_id         string
-	C_name       string
-	C_tel        string
-	C_latitude   float64
-	C_longtitude float64
-	R_id         int
-	Created_at   time.Time
-	Ordertline   Api.Orderline
+func postSubmitCart(w http.ResponseWriter,r *http.Request){
+	var order Api.Order
+
+	err:=json.NewDecoder(r.Body).Decode(&order)
+	if err != nil {
+        http.Error(w, err.Error(), http.StatusBadRequest)
+        return
+    }
+	//json.NewEncoder(w).Encode(Api.AddOrder())
+	fmt.Fprintf(w, order)
 }
 
 func allMenu(w http.ResponseWriter, r *http.Request) {
@@ -64,9 +64,6 @@ func getBanner(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(Api.GetBanner(lat, long))
 }
 
-func submitCart(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-}
 
 func homePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Homepage")
@@ -78,10 +75,11 @@ func handleRequests() {
 	myRouter.HandleFunc("/allmenu/{R_id}", allMenu).Methods("GET")
 	myRouter.HandleFunc("/restaurant/{keyword}/{latitude}/{longitude}", getRestaurant).Methods("GET")
 	myRouter.HandleFunc("/banner/{latitude}/{longitude}", getBanner).Methods("GET")
+	myRouter.HandleFunc("/submitcart", postSubmitCart).Methods("POST")
 	log.Fatal(http.ListenAndServe(":9000", myRouter))
 }
 
 func main() {
 	handleRequests()
-	Api.MExtraAdd(2, 2, 2, "hi") //test
+
 }
