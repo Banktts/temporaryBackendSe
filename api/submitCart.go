@@ -21,38 +21,35 @@ type Order struct {
 type Ordertline struct {
 	M_id        int      
 	M_amount    int      
-	M_Extra 	[]M_Extra
+	M_Extra 	[]M_Extra 
+}
+type Orderline struct {
+	M_id        int      
+	M_amount    int      
+	M_Extra 	[]bson.M
 }
 
 type M_Extra struct{
 	M_id int
 	E_id int
-	Comment string
 }
 
 
-type Orderline struct {
-	O_id        int      `Bson:"O_id"`
-	M_id        int      `Bson:"M_id"`
-	amount        int      `Bson:"amount"`
-	special_inst string `Bson:"special_inst"`
-}
-
-func MExtraAdd(O_id int,E_id int,M_id int,Comment string) []bson.M  {
+func MExtraAdd(O_id int,E_id int,M_id int)   {
 	fmt.Println("MExtraAdd")
 	extra := connectMongoDB().Collection("EXTRA_Add_On")
 	AddOnLine:=bson.D{
 		{Key: "O_id", Value:O_id},
 		{Key: "E_id",Value:E_id},
 		{Key: "M_id",Value:M_id},
-		{Key: "Comment",Value:Comment},
+
 	}
 	_,err:= extra.InsertOne(ctx,AddOnLine)
 	if err != nil {
 		fmt.Println(err)
 	}
 	disconectMongoDB()
-	return MExtra(O_id)
+
 }
 
 func MExtra(O_id int) []bson.M{
@@ -68,11 +65,38 @@ func MExtra(O_id int) []bson.M{
 	return extras
 }
 
-// func AddOrderline() {
-// 	db := connectSqlDB()
-// 	sqlStatement := `INSERT INTO orderline (O_ID, M_ID, E_ID, special_inst) VALUES ($1, $2, $3, $4)`
-// 	res, err := db.Exec(sqlStatement, 30, "jon@calhoun.io", "Jonathan", "Calhoun").Scan(&id)
-// 	if err != nil {
-// 	  panic(err)
-// 	}
-// }
+func AddOrderline(o_list []Ordertline) []Orderline {
+
+	db := connectSqlDB()
+
+	var order_id int
+	err := db.QueryRow("select O_ID from ordert ORDER BY O_ID DESC LIMIT 1").Scan(&order_id)
+	if err != nil {
+		panic(err.Error())
+	}
+	var allOrderline []Orderline
+
+	for _, s := range o_list  {
+
+		rows, err := db.Query(`INSERT INTO orderline (O_ID, M_ID, amount) VALUES (?, ?, ?)`, order_id, s.M_id, s.M_amount)
+		if err != nil {
+			panic(err)
+		}
+		defer rows.Close()
+
+		odl := Orderline{
+			M_id:        s.M_id,
+			M_amount:    s.M_amount,
+			M_Extra: MExtra(order_id),
+		}		
+		allOrderline = append(allOrderline,odl)		
+		
+		for _,m := range s.M_Extra{
+			MExtraAdd(order_id, m.E_id, m.M_id)
+		}
+		
+	}
+
+	return allOrderline
+
+}
