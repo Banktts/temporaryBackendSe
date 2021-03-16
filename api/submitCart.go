@@ -151,6 +151,7 @@ func MExtra(O_id int) []bson.M{
 	}
 	rawData.All(context.TODO(), &extras)
 	disconectMongoDB()
+
 	return extras
 }
 
@@ -172,7 +173,9 @@ func AddOrderline(o_list []Ordertline) []Orderline {
 			panic(err)
 		}
 		defer rows.Close()
-
+		for _,m := range s.M_Extra{
+			MExtraAdd(order_id, m.E_id, m.M_id)
+		}
 		odl := Orderline{
 			M_id:        s.M_id,
 			M_amount:    s.M_amount,
@@ -181,9 +184,7 @@ func AddOrderline(o_list []Ordertline) []Orderline {
 		}		
 		allOrderline = append(allOrderline,odl)		
 		
-		for _,m := range s.M_Extra{
-			MExtraAdd(order_id, m.E_id, m.M_id)
-		}
+		
 		
 	}
 

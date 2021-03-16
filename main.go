@@ -19,7 +19,6 @@ func postSubmitCart(w http.ResponseWriter,r *http.Request){
 		return
     }
 	json.NewEncoder(w).Encode(Api.AddOrder(order))
-	fmt.Fprintf(w,"%+v", order)
 
 }
 
