@@ -4,8 +4,32 @@ import (
 	"context"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
+	"time"
 	_ "github.com/go-sql-driver/mysql"
 )
+type Order struct {
+	C_id         int
+	C_name       string
+	C_tel        string
+	C_latitude   float64
+	C_longtitude float64
+	R_id         int
+	Created_at   time.Time
+	Ordertline   []Ordertline
+}
+
+type Ordertline struct {
+	M_id        int      
+	M_amount    int      
+	M_Extra 	[]M_Extra
+}
+
+type M_Extra struct{
+	M_id int
+	E_id int
+	Comment string
+}
+
 
 type Orderline struct {
 	O_id        int      `Bson:"O_id"`
@@ -44,11 +68,11 @@ func MExtra(O_id int) []bson.M{
 	return extras
 }
 
-func AddOrderline() {
-	db := connectSqlDB()
-	sqlStatement := `INSERT INTO orderline (O_ID, M_ID, E_ID, special_inst) VALUES ($1, $2, $3, $4)`
-	res, err := db.Exec(sqlStatement, 30, "jon@calhoun.io", "Jonathan", "Calhoun").Scan(&id)
-	if err != nil {
-	  panic(err)
-	}
-}
+// func AddOrderline() {
+// 	db := connectSqlDB()
+// 	sqlStatement := `INSERT INTO orderline (O_ID, M_ID, E_ID, special_inst) VALUES ($1, $2, $3, $4)`
+// 	res, err := db.Exec(sqlStatement, 30, "jon@calhoun.io", "Jonathan", "Calhoun").Scan(&id)
+// 	if err != nil {
+// 	  panic(err)
+// 	}
+// }
