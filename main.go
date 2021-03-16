@@ -16,10 +16,11 @@ func postSubmitCart(w http.ResponseWriter,r *http.Request){
 	err:=json.NewDecoder(r.Body).Decode(&order)
 	if err != nil {
         http.Error(w, err.Error(), http.StatusBadRequest)
-        return
+		return
     }
-	//json.NewEncoder(w).Encode(Api.AddOrder())
-	fmt.Fprintf(w, order)
+	json.NewEncoder(w).Encode(Api.AddOrder(order))
+	fmt.Fprintf(w,"%+v", order)
+
 }
 
 func allMenu(w http.ResponseWriter, r *http.Request) {

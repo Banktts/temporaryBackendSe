@@ -12,7 +12,7 @@ type Order struct {
 	C_name       string
 	C_tel        string
 	C_latitude   float64
-	C_longtitude float64
+	C_longitude  float64
 	R_id         int
 	Created_at   time.Time
 	Ordertline   []Ordertline
@@ -20,12 +20,14 @@ type Order struct {
 
 type Ordertline struct {
 	M_id        int      
-	M_amount    int      
+	M_amount    int   
+	M_comment	string      
 	M_Extra 	[]M_Extra 
 }
 type Orderline struct {
 	M_id        int      
-	M_amount    int      
+	M_amount    int
+	M_comment	string      
 	M_Extra 	[]bson.M
 }
 
@@ -33,8 +35,95 @@ type M_Extra struct{
 	M_id int
 	E_id int
 }
+type CustomerStruct struct{
+	C_id int `Bson:"C_id"`
+	C_name string `Bson:"C_name"`
+	C_Tel string `Bson:"C_Tel"`
+	C_latitude float64 `Bson:"C_latitude"`
+	C_longtitude float64 `Bson:"C_longtitude"`
+	R_id int `Bson:"R_id"`
+	D_id int `Bson:"D_id"`
+	Created_at  time.Time  `Bson:"D_id"`
+	Orderline   []Orderline `Bson:"Orderline "`
+
+}
+func AddOrder (order Order )  CustomerStruct {
+	
+	db := connectSqlDB()
+
+	
+
+	/////////////////////////
+	rows, err:= db.Query("select R_latitude ,R_longitude from restaurant where R_ID = ?",order.R_id)
+	if err!=nil{
+		fmt.Println(err)
+	}
+	//defer rows.Close()
+	var R_latitude float64
+	var R_longitude float64
+	for rows.Next() {
+		
+
+		err := rows.Scan(&R_latitude,&R_longitude)
+		if err != nil {
+			panic(err.Error())
+		}
+	}
+/////////////////////////////////////////
+	rows1, err1 := db.Query(" select (sqrt(power((D_latitude-?),2)+power((D_longitude-?),2)))*100  as distance  ,D_ID from delivery_man ORDER BY distance DESC limit 1"   ,R_latitude,R_longitude)
+	if err1!=nil{
+		fmt.Println(err1)
+	}
+	//defer rows1.Close()
+	var distance float64
+	var D_id int
+
+	for rows1.Next() {
+		
+		err := rows1.Scan(&distance,&D_id)
+		if err != nil {
+			panic(err.Error())
+		}
+	}
+	
+///////////////////////////
+	stmt, es := connectSqlDB().Prepare("INSERT INTO ordert (C_ID,R_ID,D_ID,created_at) VALUES (?,?,?,?) ")		
+	if es != nil {
+		panic(es.Error())
+	}
+	_,err2 := stmt.Exec(order.C_id,order.R_id,D_id,order.Created_at)
+	if err2 != nil {
+		panic(err2.Error())
+	}
+	///////////////////////////////////
+
+//////////////////////////////////
+var order_id int
+err5 := db.QueryRow("select O_ID from ordert ORDER BY O_ID DESC LIMIT 1").Scan(&order_id)
+if err5 != nil {
+ panic(err5.Error())
+}
+fmt.Println("order",order_id)
+////////////////////////////////////////
+///////////////////////////////
+	customer  := CustomerStruct{
+		C_id   : order.C_id,
+		C_name : order.C_name ,
+		C_Tel : order.C_tel,
+		C_latitude   : order.C_latitude,
+		C_longtitude : order.C_longitude,
+		R_id : order.R_id,
+		D_id : D_id,
+		Created_at : order.Created_at,
+		Orderline   : AddOrderline(order.Ordertline),
+	}
+	/////////////////////////////////////
+	
+
+	return customer
 
 
+}
 func MExtraAdd(O_id int,E_id int,M_id int)   {
 	fmt.Println("MExtraAdd")
 	extra := connectMongoDB().Collection("EXTRA_Add_On")
@@ -78,7 +167,7 @@ func AddOrderline(o_list []Ordertline) []Orderline {
 
 	for _, s := range o_list  {
 
-		rows, err := db.Query(`INSERT INTO orderline (O_ID, M_ID, amount) VALUES (?, ?, ?)`, order_id, s.M_id, s.M_amount)
+		rows, err := db.Query(`INSERT INTO orderline (O_ID, M_ID, amount, special_inst) VALUES (?, ?, ?, ?)`, order_id, s.M_id, s.M_amount, s.M_comment)
 		if err != nil {
 			panic(err)
 		}
@@ -87,6 +176,7 @@ func AddOrderline(o_list []Ordertline) []Orderline {
 		odl := Orderline{
 			M_id:        s.M_id,
 			M_amount:    s.M_amount,
+			M_comment:	s.M_comment,
 			M_Extra: MExtra(order_id),
 		}		
 		allOrderline = append(allOrderline,odl)		
