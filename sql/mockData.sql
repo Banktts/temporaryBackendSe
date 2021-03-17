@@ -300,8 +300,8 @@ INSERT INTO ordert (O_ID,C_ID,R_ID,D_ID,created_at) VALUES
 (8,10,14,17,"2020-11-14 19:20:00"),
 (9,3,12,4,"2020-11-14 20:20:00");
 
-INSERT INTO orderline(O_ID,M_ID,E_ID,amount,special_inst)  VALUES
-(1,1,2,1,"spicy"),
-(1,2,2,2,""),
-(2,9,8,1,""),
-(2,14,8,3,"");
+INSERT INTO orderline(O_ID,M_ID,amount,special_inst)  VALUES
+(1,1,1,"spicy"),
+(1,2,2,""),
+(2,9,1,""),
+(2,14,3,"");

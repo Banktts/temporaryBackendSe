@@ -37,10 +37,9 @@ CREATE TABLE ordert (
 CREATE TABLE orderline (
 	O_ID int NOT NULL,
 	M_ID int NOT NULL,
-	E_ID int NOT NULL,
 	amount int NOT NULL,
-	special_inst varchar(255) NOT NULL,
-	primary key(O_ID, M_ID, E_ID)
+	special_inst varchar(255),
+	primary key(O_ID, M_ID)
 );
 
 CREATE TABLE delivery_man (
