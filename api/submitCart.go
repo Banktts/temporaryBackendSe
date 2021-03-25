@@ -43,22 +43,20 @@ type CustomerStruct struct{
 	C_longtitude float64 `Bson:"C_longtitude"`
 	R_id int `Bson:"R_id"`
 	D_id int `Bson:"D_id"`
+	O_id int `Bson:"O_id"`
 	Created_at  time.Time  `Bson:"D_id"`
 	Orderline   []Orderline `Bson:"Orderline "`
-
+	DeliveryFee int `Bson:"DeliveryFee"`
+	TotalPrice int `Bson:"TotalPrice"`
 }
 func AddOrder (order Order )  CustomerStruct {
 	
 	db := connectSqlDB()
 
-	
-
-	/////////////////////////
 	rows, err:= db.Query("select R_latitude ,R_longitude from restaurant where R_ID = ?",order.R_id)
 	if err!=nil{
 		fmt.Println(err)
 	}
-	//defer rows.Close()
 	var R_latitude float64
 	var R_longitude float64
 	for rows.Next() {
@@ -69,12 +67,11 @@ func AddOrder (order Order )  CustomerStruct {
 			panic(err.Error())
 		}
 	}
-/////////////////////////////////////////
+
 	rows1, err1 := db.Query(" select (sqrt(power((D_latitude-?),2)+power((D_longitude-?),2)))*100  as distance  ,D_ID from delivery_man ORDER BY distance DESC limit 1"   ,R_latitude,R_longitude)
 	if err1!=nil{
 		fmt.Println(err1)
 	}
-	//defer rows1.Close()
 	var distance float64
 	var D_id int
 
@@ -86,7 +83,6 @@ func AddOrder (order Order )  CustomerStruct {
 		}
 	}
 	
-///////////////////////////
 	stmt, es := connectSqlDB().Prepare("INSERT INTO ordert (C_ID,R_ID,D_ID,created_at) VALUES (?,?,?,?) ")		
 	if es != nil {
 		panic(es.Error())
@@ -95,17 +91,36 @@ func AddOrder (order Order )  CustomerStruct {
 	if err2 != nil {
 		panic(err2.Error())
 	}
-	///////////////////////////////////
 
-//////////////////////////////////
-var order_id int
-err5 := db.QueryRow("select O_ID from ordert ORDER BY O_ID DESC LIMIT 1").Scan(&order_id)
-if err5 != nil {
- panic(err5.Error())
-}
-fmt.Println("order",order_id)
-////////////////////////////////////////
-///////////////////////////////
+	var order_id int
+	var totalPrice int 
+	totalPrice = 0 
+	err5 := db.QueryRow("select O_ID from ordert ORDER BY O_ID DESC LIMIT 1").Scan(&order_id)
+	if err5 != nil {
+	panic(err5.Error())
+	}
+	fmt.Println("order",order_id)
+
+	
+	rows4, err4:= db.Query(" select menu.M_price,orderline.amount from orderline natural join menu where O_ID = ?",order_id-1)
+	if err4!=nil{
+		fmt.Println(err4)
+	}
+	
+	for rows4.Next() {
+		var M_price int
+		var amount int
+		err4 := rows4.Scan(&M_price, &amount)
+		if err4 != nil {
+			panic(err4.Error())
+		}
+		fmt.Println(M_price , amount )
+		totalPrice  = totalPrice + M_price * amount 
+	}
+	
+
+	totalPrice = totalPrice+10
+
 	customer  := CustomerStruct{
 		C_id   : order.C_id,
 		C_name : order.C_name ,
@@ -114,10 +129,13 @@ fmt.Println("order",order_id)
 		C_longtitude : order.C_longitude,
 		R_id : order.R_id,
 		D_id : D_id,
+		O_id : order_id,
 		Created_at : order.Created_at,
 		Orderline   : AddOrderline(order.Ordertline),
+		DeliveryFee : 10,
+		TotalPrice : totalPrice,
 	}
-	/////////////////////////////////////
+	
 	
 
 	return customer
