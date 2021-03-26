@@ -5,65 +5,23 @@ import(
 )
 
 type Deliveryman struct {
-	D_ID int `json:"R_ID"`
-	D_name string `json:"R_name"`
-	D_rating float64 `json:"R_rating"`
-	D_tel int `json:"R_votes"`
+	D_ID int `json:"D_ID"`
+	D_name string `json:"D_name"`
+	D_rating float64 `json:"D_rating"`
+	D_tel string `json:"D_phone"`
+	Waiting_time string `json:"Waiting_time"`
   }
 
-func Delivery()[]Res {	
+func OrderInfo(DeliveryId int, OrderId int)Deliveryman{
 	db := connectSqlDB()
 
-	rows, err:= db.Query("select R_ID, R_name, R_rating, R_votes, R_isRecomend, R_image_url, ROUND((sqrt(power((R_latitude-?)*110.574,2)+power((R_longitude-?)*111.320,2))),2) as R_distance, R_location from restaurant where R_name like '%"+keyword+"%' order by R_distance", latitude, longitude)
+	var d Deliveryman
+	err:= db.QueryRow("select D_ID, D_name, D_rating, D_phone from delivery_man where D_ID = ?" , DeliveryId).Scan(&d.D_ID, &d.D_name, &d.D_rating, &d.D_tel)
 	if err!=nil{
 		fmt.Println(err)
 	}
-
-	defer rows.Close()
-
-	var restaurantList []Res
-	for rows.Next() {
-		
-		err := rows.Scan(&res.R_ID, &res.R_name, &res.R_rating, &res.R_votes, &res.R_isRecomend, &res.R_image_url, &res.R_distance, &res.R_location)
-		if err != nil {
-			panic(err.Error())
-		}
-		
-	}
-	return restaurantList
-}
-func WaitingTime() int{
-	db := connectSqlDB()
-
-
-
-	rows, err:= db.Query("select D_ID from delivery_man ",D_ID)
-	if err!=nil{
-		fmt.Println(err)
-	}
-
-
-	rows, err:= db.Query("select ROUND((sqrt(power((R_latitude-?)*110.574,2)+power((R_longitude-?)*111.320,2))),2) as R_distance, R_location from restaurant where R_name like '%"+keyword+"%' order by R_distance", latitude, longitude)
-	if err!=nil{
-		fmt.Println(err)
-	}
-	defer rows.Close()
-
-	var restaurantList []Res
-	for rows.Next() {
-		
-		err := rows.Scan()
-		if err != nil {
-			panic(err.Error())
-		}
-		
-	}
-	return 
-
-}
-
-func OrderInfo() {
-	
+	d.Waiting_time = "123"
+	return d
 }
 
 
