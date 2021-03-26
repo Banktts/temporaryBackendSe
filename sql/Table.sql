@@ -44,7 +44,7 @@ CREATE TABLE orderline (
 
 CREATE TABLE delivery_man (
 	D_ID int   NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	D_name varchar(20)NOT NULL,
+	D_name varchar(32)NOT NULL,
 	D_phone varchar(15) NOT NULL,
 	D_rating float NOT NULL,
 	D_latitude  FLOAT(6) NOT NULL,
