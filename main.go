@@ -68,13 +68,18 @@ func getStatus(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 
-	O_ID := params["OrderId"]
-	D_ID:= params["DeliveryId"]
+	O_ID, err1 := strconv.ParseFloat(params["OrderId"], 64)
+	if err1 != nil {
+		panic(err1.Error())
+	}
+	D_ID, err2 := strconv.ParseFloat(params["DeliveryId"], 64)
+	if err2 != nil {
+		panic(err2.Error())
+	}
 	
 	fmt.Println(O_ID, D_ID)
-	// json.NewEncoder(w).Encode(Api.GetBanner(lat, long))
+	 json.NewEncoder(w).Encode(Api.OrderInfo(int(D_ID),int(O_ID)))
 }
-
 
 func homePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Homepage")
