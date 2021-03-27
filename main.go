@@ -76,12 +76,8 @@ func getStatus(w http.ResponseWriter, r *http.Request) {
     if err2 != nil {
         panic(err2.Error())
     }
-    fmt.Println(O_ID, D_ID)
-
-    json.NewEncoder(w).Encode(Api.OrderInfo(int(D_ID),int(O_ID)))
-	// Api.OrderInfo(int(D_ID),int(O_ID))
+	 json.NewEncoder(w).Encode(Api.OrderInfo(int(D_ID),int(O_ID)))
 }
-
 
 func homePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Homepage")
