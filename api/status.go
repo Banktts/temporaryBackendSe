@@ -2,6 +2,8 @@ package api
 import(
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"math"
+	"strconv"
 )
 
 type Deliveryman struct {
@@ -9,7 +11,7 @@ type Deliveryman struct {
 	D_name string `json:"D_name"`
 	D_rating float64 `json:"D_rating"`
 	D_tel string `json:"D_phone"`
-	Waiting_time float64 `json:"Waiting_time"`
+	Waiting_time string `json:"Waiting_time"`
   }
 
 func OrderInfo(DeliveryId int, OrderId int)Deliveryman{
@@ -20,9 +22,10 @@ func OrderInfo(DeliveryId int, OrderId int)Deliveryman{
 	if err!=nil{
 		fmt.Println(err)
 	}
-	d.Waiting_time = WaitingTime(DeliveryId,OrderId)
+	d.Waiting_time = strconv.Itoa(int(WaitingTime(DeliveryId,OrderId)))
 	return d
 }
+
 func WaitingTime(D_ID int,O_ID int) float64{
     db := connectSqlDB()
     var D_latitude float64
@@ -54,7 +57,7 @@ func WaitingTime(D_ID int,O_ID int) float64{
         }
         
     }
-    return 20+ math.Pow(math.Pow(D_latitude-C_latitude,2) + math.Pow(D_longitude-C_longitude,2),1/2)
+    return 20+ math.Sqrt(math.Pow((D_latitude-C_latitude)*110.574,2) + math.Pow((D_longitude-C_longitude)*111.320,2))
 }
 
  
