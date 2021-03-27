@@ -23,6 +23,7 @@ func OrderInfo(DeliveryId int, OrderId int)Deliveryman{
 		fmt.Println(err)
 	}
 	d.Waiting_time = strconv.Itoa(int(WaitingTime(DeliveryId,OrderId)))
+	
 	return d
 }
 
