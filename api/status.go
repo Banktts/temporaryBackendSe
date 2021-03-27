@@ -54,7 +54,7 @@ func WaitingTime(D_ID int,O_ID int) float64{
         }
         
     }
-    return 20+ math.Pow(math.Pow(D_latitude-C_latitude,2) + math.Pow(D_longitude-C_longitude,2),1/2)
+    return 20+ math.Sqrt(math.Pow((D_latitude-C_latitude)*110.574,2) + math.Pow((D_longitude-C_longitude)*111.320,2))
 }
 
  
