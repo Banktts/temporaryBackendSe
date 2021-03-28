@@ -12,14 +12,22 @@ import (
 
 func postSubmitCart(w http.ResponseWriter,r *http.Request){
 	var order Api.Order
-
 	err:=json.NewDecoder(r.Body).Decode(&order)
 	if err != nil {
         http.Error(w, err.Error(), http.StatusBadRequest)
 		return
     }
 	json.NewEncoder(w).Encode(Api.AddOrder(order))
+}
 
+func postReview(w http.ResponseWriter,r *http.Request){
+	var review Api.Review
+	err:=json.NewDecoder(r.Body).Decode(&review)
+	if err != nil {
+        http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+    }
+	Api.AddReview(review)
 }
 
 func allMenu(w http.ResponseWriter, r *http.Request) {
@@ -90,6 +98,7 @@ func handleRequests() {
 	myRouter.HandleFunc("/restaurant/{keyword}/{latitude}/{longitude}", getRestaurant).Methods("GET")
 	myRouter.HandleFunc("/banner/{latitude}/{longitude}", getBanner).Methods("GET")
 	myRouter.HandleFunc("/submitcart", postSubmitCart).Methods("POST")
+	myRouter.HandleFunc("/review", postReview).Methods("POST")
 	myRouter.HandleFunc("/waitingFood/{OrderId}/{DeliveryId}", getStatus).Methods("GET")
 	log.Fatal(http.ListenAndServe(":9000", myRouter))
 }
