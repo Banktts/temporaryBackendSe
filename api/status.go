@@ -3,7 +3,6 @@ import(
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"math"
-	"strconv"
 )
 
 type Deliveryman struct {
@@ -11,7 +10,7 @@ type Deliveryman struct {
 	D_name string `json:"D_name"`
 	D_rating float64 `json:"D_rating"`
 	D_tel string `json:"D_phone"`
-	Waiting_time string `json:"Waiting_time"`
+	Waiting_time int `json:"Waiting_time"`
   }
 
 func OrderInfo(DeliveryId int, OrderId int)Deliveryman{
@@ -22,7 +21,7 @@ func OrderInfo(DeliveryId int, OrderId int)Deliveryman{
 	if err!=nil{
 		fmt.Println(err)
 	}
-	d.Waiting_time = strconv.Itoa(int(WaitingTime(DeliveryId,OrderId)))
+	d.Waiting_time = int(WaitingTime(DeliveryId,OrderId))
 	
 	return d
 }
