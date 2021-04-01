@@ -23,5 +23,6 @@ func GetBanner(latitude float64, longitude float64)[]Res {
 		}
 		bannerList = append(bannerList, res)
 	}
+	disconnectSqlDB()
 	return bannerList
 }

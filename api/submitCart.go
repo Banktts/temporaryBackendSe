@@ -137,7 +137,7 @@ func AddOrder (order Order )  CustomerStruct {
 	}
 	
 	
-
+	disconnectSqlDB()
 	return customer
 
 
@@ -205,7 +205,7 @@ func AddOrderline(o_list []Ordertline) []Orderline {
 		
 		
 	}
-
+	disconnectSqlDB()
 	return allOrderline
 
 }
