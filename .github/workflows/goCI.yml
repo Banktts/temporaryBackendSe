@@ -8,11 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-
-    - name: Set up Go
-      uses: actions/setup-go@v2
+    
+    - name: SSH Commands 
+      uses: appleboy/ssh-action@master
       with:
-        go-version: 1.15
-
-    - name: Build
-      run: go build -o main main.go
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }} 
+        key: ${{ secrets.SSH_KEY }} 
+        port: 22
+        script: |
+          cd temporaryBackendSe
+          fuser -k 80/tcp
+          go build -o main main.go
+          ./main&
