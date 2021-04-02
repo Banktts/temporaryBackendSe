@@ -28,7 +28,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           rm: true
           source: "main/"
-          target: "."
+          target: "./*"
     - name: SSH Commands 
       uses: appleboy/ssh-action@master
       with:
