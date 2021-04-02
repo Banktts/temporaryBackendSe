@@ -8,14 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    
+
     - name: SSH Commands 
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.REMOTE_HOST }}
-        username: ${{ secrets.REMOTE_USER }} 
-        key: ${{ secrets.SSH_KEY }} 
-        port: 22
+        USERNAME: ${{ secrets.REMOTE_USER }} 
+        KEY: ${{ secrets.SSH_KEY }} 
+        PORT: 22
         script: |
           cd temporaryBackendSe
           fuser -k 80/tcp
