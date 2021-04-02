@@ -36,33 +36,31 @@ type M_Extra struct{
 	E_id int
 }
 type CustomerStruct struct{
-	C_id int `Bson:"C_id"`
+	
 	C_name string `Bson:"C_name"`
-	C_Tel string `Bson:"C_Tel"`
-	C_latitude float64 `Bson:"C_latitude"`
-	C_longtitude float64 `Bson:"C_longtitude"`
-	R_id int `Bson:"R_id"`
-	D_id int `Bson:"D_id"`
 	O_id int `Bson:"O_id"`
-	Created_at  time.Time  `Bson:"D_id"`
+	C_Tel string `Bson:"C_Tel"`
+	Address string `Bson:"Address"`
 	Orderline   []Orderline `Bson:"Orderline "`
 	DeliveryFee int `Bson:"DeliveryFee"`
 	TotalPrice int `Bson:"TotalPrice"`
+	D_id int `Bson:"D_id"`
 }
 func AddOrder (order Order )  CustomerStruct {
 	
 	db := connectSqlDB()
 
-	rows, err:= db.Query("select R_latitude ,R_longitude from restaurant where R_ID = ?",order.R_id)
+	rows, err:= db.Query("select R_latitude ,R_longitude,R_location from restaurant where R_ID = ?",order.R_id)
 	if err!=nil{
 		fmt.Println(err)
 	}
 	var R_latitude float64
 	var R_longitude float64
+	var address string
 	for rows.Next() {
 		
 
-		err := rows.Scan(&R_latitude,&R_longitude)
+		err := rows.Scan(&R_latitude,&R_longitude,&address)
 		if err != nil {
 			panic(err.Error())
 		}
@@ -122,18 +120,16 @@ func AddOrder (order Order )  CustomerStruct {
 	totalPrice = totalPrice+10
 
 	customer  := CustomerStruct{
-		C_id   : order.C_id,
+		
 		C_name : order.C_name ,
-		C_Tel : order.C_tel,
-		C_latitude   : order.C_latitude,
-		C_longtitude : order.C_longitude,
-		R_id : order.R_id,
-		D_id : D_id,
 		O_id : order_id,
-		Created_at : order.Created_at,
+		C_Tel : order.C_tel,
+		Address  : address,
 		Orderline   : AddOrderline(order.Ordertline),
 		DeliveryFee : 10,
 		TotalPrice : totalPrice,
+		D_id : D_id,
+
 	}
 	
 	
