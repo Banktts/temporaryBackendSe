@@ -26,7 +26,6 @@ jobs:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_KEY }}
-          port: 22
           rm: true
           source: "main/"
           target: "."
@@ -36,7 +35,6 @@ jobs:
         host: ${{ secrets.REMOTE_HOST }}
         username: ${{ secrets.REMOTE_USER }}
         key: ${{ secrets.SSH_KEY }}
-        port: 22
         script: |
           kill -9 $(lsof -t -i:8080)
           ./main
