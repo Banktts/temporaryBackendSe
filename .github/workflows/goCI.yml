@@ -13,11 +13,12 @@ jobs:
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.REMOTE_HOST }}
-        USERNAME: ${{ secrets.REMOTE_USER }} 
-        KEY: ${{ secrets.SSH_KEY }} 
+        username: ${{ secrets.REMOTE_USER }} 
+        key: ${{ secrets.SSH_KEY }} 
         PORT: 22
         script: |
           cd temporaryBackendSe
           fuser -k 80/tcp
           go build -o main main.go
+          rm main
           ./main&
