@@ -28,13 +28,21 @@ type Orderline struct {
 	M_id        int      
 	M_amount    int
 	M_comment	string      
-	M_Extra 	[]bson.M
+	M_Extra 	[]Item
+	E_price     int
 }
 
 type M_Extra struct{
 	M_id int
 	E_id int
 }
+
+type Item  struct{
+	O_id int `Bson:"O_id"`
+	E_id int `Bson:"E_id"`
+	M_id int `Bson:"M_id"`
+}
+
 type CustomerStruct struct{
 	
 	C_name string `Bson:"C_name"`
@@ -116,16 +124,22 @@ func AddOrder (order Order )  CustomerStruct {
 		totalPrice  = totalPrice + M_price * amount 
 	}
 	
-
+	orderline:=AddOrderline(order.Ordertline)
 	totalPrice = totalPrice+10
+	fmt.Println("before",totalPrice)
+	for _, order := range orderline{
+		
+		totalPrice += order.E_price
 
+	}
+	fmt.Println("after",totalPrice)
 	customer  := CustomerStruct{
 		
 		C_name : order.C_name ,
 		O_id : order_id,
 		C_Tel : order.C_tel,
 		Address  : address,
-		Orderline   : AddOrderline(order.Ordertline),
+		Orderline   : orderline,
 		DeliveryFee : 10,
 		TotalPrice : totalPrice,
 		D_id : D_id,
@@ -133,11 +147,31 @@ func AddOrder (order Order )  CustomerStruct {
 	}
 	
 	
-	disconnectSqlDB()
+
 	return customer
 
 
 }
+
+func ExtraSumPrice(extras []Item) int{
+	Sum := 0
+	extra := connectMongoDB().Collection("EXTRA_ITEM")
+	
+	for _, item := range extras{
+		var Fee struct{
+			E_price int
+		}
+		if err:= extra.FindOne(context.TODO(), bson.M{"E_id": item.E_id}).Decode(&Fee); err != nil{
+			fmt.Print(err)
+		}
+		Sum += Fee.E_price
+
+	}
+	disconectMongoDB()
+	return Sum
+
+}
+
 func MExtraAdd(O_id int,E_id int,M_id int)   {
 	fmt.Println("MExtraAdd")
 	extra := connectMongoDB().Collection("EXTRA_Add_On")
@@ -155,17 +189,17 @@ func MExtraAdd(O_id int,E_id int,M_id int)   {
 
 }
 
-func MExtra(O_id int) []bson.M{
+func MExtra(O_id int) []Item{
 	fmt.Println("MExtra")
 	extra := connectMongoDB().Collection("EXTRA_Add_On")
-	var extras []bson.M
+	var extras []Item
 	rawData, err := extra.Find(context.TODO(), bson.M{"O_id": O_id})
 	if err != nil {
 		fmt.Println(err)
 	}
 	rawData.All(context.TODO(), &extras)
 	disconectMongoDB()
-
+	fmt.Println(extras)
 	return extras
 }
 
@@ -190,18 +224,20 @@ func AddOrderline(o_list []Ordertline) []Orderline {
 		for _,m := range s.M_Extra{
 			MExtraAdd(order_id, m.E_id, m.M_id)
 		}
+		m_extra:=MExtra(order_id)
 		odl := Orderline{
 			M_id:        s.M_id,
 			M_amount:    s.M_amount,
 			M_comment:	s.M_comment,
-			M_Extra: MExtra(order_id),
+			M_Extra: m_extra,
+			E_price: ExtraSumPrice(m_extra),
 		}		
 		allOrderline = append(allOrderline,odl)		
-		
+		fmt.Println(ExtraSumPrice(odl.M_Extra))
 		
 		
 	}
-	disconnectSqlDB()
+
 	return allOrderline
 
 }
