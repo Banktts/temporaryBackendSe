@@ -100,7 +100,7 @@ func handleRequests() {
 	myRouter.HandleFunc("/submitcart", postSubmitCart).Methods("POST")
 	myRouter.HandleFunc("/review", postReview).Methods("POST")
 	myRouter.HandleFunc("/waitingFood/{OrderId}/{DeliveryId}", getStatus).Methods("GET")
-	log.Fatal(http.ListenAndServe(":9000", myRouter))
+	log.Fatal(http.ListenAndServe(":80", myRouter))
 }
 
 func main() {
