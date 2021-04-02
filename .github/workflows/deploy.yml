@@ -1,14 +1,10 @@
-name: Go
+name: Go CI
 
-on:
-  push:
-    branches: 
-      -main
-      -dev/api 
+on: [push]
 
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
