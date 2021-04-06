@@ -89,7 +89,6 @@ func AllMenu(R_id int) []Typ {
 
 	}
 	fmt.Println(alltyp)
-	disconnectSqlDB()
 	return alltyp
 }
 
