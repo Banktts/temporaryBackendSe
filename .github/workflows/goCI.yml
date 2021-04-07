@@ -19,6 +19,5 @@ jobs:
         script: |
           cd temporaryBackendSe
           fuser -k 80/tcp
-          rm main
           go build -o main main.go
           ./main&
