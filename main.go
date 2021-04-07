@@ -88,7 +88,7 @@ func getStatus(w http.ResponseWriter, r *http.Request) {
 }
 
 func homePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Homepage")
+	fmt.Fprintf(w, "Homepage hi")
 }
 
 func handleRequests() {
