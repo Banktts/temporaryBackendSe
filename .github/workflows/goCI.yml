@@ -18,6 +18,4 @@ jobs:
         PORT: 22
         script: |
           cd temporaryBackendSe
-          fuser -k 80/tcp
           go build -o main main.go
-          ./main&
