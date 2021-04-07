@@ -18,6 +18,7 @@ jobs:
         PORT: 22
         script: |
           cd temporaryBackendSe
+          git pull
           kill -9 $(lsof -t -i:80)
           rm main
           go build -o main main.go
