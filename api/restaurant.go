@@ -34,6 +34,5 @@ func GetRestaurant(keyword string, latitude float64, longitude float64)[]Res {
 		}
 		restaurantList = append(restaurantList, res)
 	}
-	disconnectSqlDB()
 	return restaurantList
 }
