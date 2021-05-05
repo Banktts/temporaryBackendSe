@@ -9,8 +9,8 @@ import(
 	_ "github.com/go-sql-driver/mysql"
 )
 var ctx, cancel = context.WithTimeout(context.Background(), 10*time.Second)
-var client, errClient = mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
-var sqlDb, errDb = sql.Open("mysql", "root:password@tcp(localhost:8080)/AgilestRelationDB")
+var client, errClient = mongo.NewClient(options.Client().ApplyURI("mongodb://104.248.149.129:27017"))
+var sqlDb, errDb = sql.Open("mysql", "root:password@tcp(104.248.149.129:8080)/AgilestRelationDB")
 
 func connectMongoDB() *mongo.Database {
 

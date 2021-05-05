@@ -2,3 +2,4 @@ file_to_ignore
 .DS_Store
 go.sum
 .idea
+main

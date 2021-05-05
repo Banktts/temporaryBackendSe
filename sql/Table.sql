@@ -37,15 +37,14 @@ CREATE TABLE ordert (
 CREATE TABLE orderline (
 	O_ID int NOT NULL,
 	M_ID int NOT NULL,
-	E_ID int NOT NULL,
 	amount int NOT NULL,
-	special_inst varchar(255) NOT NULL,
-	primary key(O_ID, M_ID, E_ID)
+	special_inst varchar(255),
+	primary key(O_ID, M_ID)
 );
 
 CREATE TABLE delivery_man (
 	D_ID int   NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	D_name varchar(20)NOT NULL,
+	D_name varchar(32)NOT NULL,
 	D_phone varchar(15) NOT NULL,
 	D_rating float NOT NULL,
 	D_latitude  FLOAT(6) NOT NULL,
